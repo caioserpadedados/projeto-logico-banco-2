@@ -51,4 +51,34 @@ INSERT INTO OrdemServico VALUES (2, 2, '2025-07-14', 'Concluída');
 
 INSERT INTO OrdemServico_Servico VALUES (1, 1, 1);
 INSERT INTO OrdemServico_Servico VALUES (2, 1, 1);
-INSERT INTO OrdemServico_Servico VALUES (2, 2, 1);
+INSERT INTO OrdemServico_Servico VALUES (2, 2, 1); 
+
+-- SELECT simples
+SELECT * FROM Cliente;
+
+-- WHERE com filtro
+SELECT * FROM Veiculo WHERE modelo LIKE 'C%';
+
+-- Expressão derivada (ex: preco * quantidade)
+SELECT oss.id_ordem, s.descricao, s.preco, oss.quantidade, (s.preco * oss.quantidade) AS total
+FROM OrdemServico_Servico oss
+JOIN Servico s ON s.id_servico = oss.id_servico;
+
+-- ORDER BY
+SELECT * FROM OrdemServico ORDER BY data_abertura DESC;
+
+-- GROUP BY + HAVING
+SELECT os.id_veiculo, COUNT(*) AS total_servicos
+FROM OrdemServico_Servico oss
+JOIN OrdemServico os ON os.id_ordem = oss.id_ordem
+GROUP BY os.id_veiculo
+HAVING COUNT(*) > 1;
+
+-- JOIN completo
+SELECT os.id_ordem, c.nome, v.modelo, s.descricao
+FROM OrdemServico os
+JOIN Veiculo v ON v.id_veiculo = os.id_veiculo
+JOIN Cliente c ON c.id_cliente = v.id_cliente
+JOIN OrdemServico_Servico oss ON oss.id_ordem = os.id_ordem
+JOIN Servico s ON s.id_servico = oss.id_servico;
+
